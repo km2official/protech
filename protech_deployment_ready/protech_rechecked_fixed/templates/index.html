@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protech | Smart Tech Solutions</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial, Helvetica, sans-serif; }
+    body { background:#f4f1ea; color:#151515; }
+    a { text-decoration:none; color:inherit; }
+    .top-bar { background:#111; color:#fff; text-align:center; padding:10px; font-size:14px; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:22px 7%; background:#f4f1ea; border-bottom:1px solid rgba(0,0,0,.08); position:sticky; top:0; z-index:100; }
+    .logo { font-size:28px; font-weight:900; letter-spacing:-1px; }
+    .logo span { color:#5f52ff; }
+    nav { display:flex; gap:28px; font-weight:600; font-size:15px; }
+    .nav-actions { display:flex; gap:12px; align-items:center; }
+    .btn { border:none; cursor:pointer; padding:12px 22px; border-radius:999px; font-weight:700; transition:.3s; display:inline-block; }
+    .btn-dark { background:#111; color:#fff; border:1px solid #111; }
+    .btn-outline { border:1px solid #111; color:#111; background:transparent; }
+    .btn-dark:hover, .btn-outline:hover { background:#5f52ff; color:#fff; border-color:#5f52ff; }
+    .hero { min-height:88vh; display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:40px; padding:70px 7%; }
+    .hero-text h1 { font-size:clamp(48px,8vw,110px); line-height:.95; letter-spacing:-4px; margin-bottom:28px; }
+    .hero-text p { max-width:560px; font-size:19px; line-height:1.7; color:#444; margin-bottom:32px; }
+    .hero-card { background:#111; color:#fff; border-radius:36px; min-height:500px; padding:30px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 30px 80px rgba(0,0,0,.25); overflow:hidden; position:relative; }
+    .hero-card::before { content:""; position:absolute; width:360px; height:360px; background:linear-gradient(135deg,#5f52ff,#00d4ff); border-radius:50%; right:-100px; top:-80px; opacity:.85; }
+    .hero-card-content, .stats { position:relative; z-index:2; }
+    .hero-card h2 { font-size:38px; margin-bottom:18px; }
+    .hero-card p { color:#ddd; line-height:1.6; max-width:360px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .stat-box { background:rgba(255,255,255,.12); backdrop-filter:blur(12px); border-radius:18px; padding:18px; }
+    .stat-box h3 { font-size:28px; }
+    .stat-box span { font-size:13px; color:#ccc; }
+    section { padding:80px 7%; }
+    .section-title { font-size:48px; letter-spacing:-2px; margin-bottom:16px; }
+    .section-subtitle { color:#555; font-size:18px; max-width:650px; margin-bottom:42px; line-height:1.6; }
+    .services-grid, .dashboard-grid, .choice-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .service-card, .feature-card, .panel-card, .request-card { background:#fff; padding:34px; border-radius:28px; box-shadow:0 15px 45px rgba(0,0,0,.08); }
+    .service-card:hover, .choice-card:hover { transform:translateY(-6px); }
+    .icon { width:54px; height:54px; border-radius:16px; background:#5f52ff; color:#fff; display:flex; justify-content:center; align-items:center; font-size:24px; margin-bottom:24px; }
+    .service-card h3, .feature-card h3, .panel-card h3 { font-size:24px; margin-bottom:14px; }
+    .service-card p, .feature-card p, .panel-card p { color:#555; line-height:1.6; }
+    .about { background:#111; color:#fff; display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
+    .about p { color:#d4d4d4; line-height:1.8; font-size:18px; }
+    .about-box { background:#fff; color:#111; border-radius:32px; padding:42px; }
+    .about-box ul { list-style:none; }
+    .about-box li { padding:15px 0; border-bottom:1px solid #eee; font-weight:700; }
+    .auth-section { display:none; min-height:80vh; padding:70px 7%; align-items:center; justify-content:center; }
+    .auth-section.active { display:flex; }
+    .auth-card { background:#fff; width:100%; max-width:520px; border-radius:30px; padding:42px; box-shadow:0 25px 70px rgba(0,0,0,.12); }
+    .auth-card h2 { font-size:36px; margin-bottom:12px; letter-spacing:-1px; }
+    .auth-card p { color:#555; margin-bottom:28px; }
+    .dashboard-page { display:none; padding:70px 7%; min-height:85vh; }
+    .dashboard-page.active { display:block; }
+    .dashboard-hero { background:#111; color:#fff; border-radius:36px; padding:45px; margin-bottom:35px; position:relative; overflow:hidden; }
+    .dashboard-hero::after { content:""; position:absolute; width:240px; height:240px; border-radius:50%; background:linear-gradient(135deg,#5f52ff,#00d4ff); right:-60px; top:-70px; }
+    .dashboard-hero h2, .dashboard-hero p, .dashboard-hero button { position:relative; z-index:2; }
+    .dashboard-hero h2 { font-size:48px; margin-bottom:12px; }
+    .dashboard-hero p { color:#ddd; font-size:18px; margin-bottom:25px; }
+    .form-group { margin-bottom:18px; }
+    label { display:block; font-weight:700; margin-bottom:8px; }
+    input, textarea { width:100%; padding:15px; border:1px solid #ddd; border-radius:14px; font-size:15px; outline:none; background:#fff; }
+    input:focus, textarea:focus { border-color:#5f52ff; }
+    textarea { min-height:125px; resize:vertical; }
+    .full-btn { width:100%; margin-top:10px; }
+    .switch-link { text-align:center; margin-top:20px; color:#555; }
+    .switch-link button { background:none; border:none; color:#5f52ff; font-weight:800; cursor:pointer; }
+    .page { display:block; }
+    .page.hidden { display:none; }
+    .profile-layout { display:grid; grid-template-columns:320px 1fr; gap:24px; margin-bottom:24px; }
+    .avatar-wrap { display:flex; flex-direction:column; align-items:center; gap:15px; text-align:center; }
+    .avatar { width:135px; height:135px; border-radius:50%; object-fit:cover; background:#eee; border:5px solid #fff; box-shadow:0 10px 35px rgba(0,0,0,.12); }
+    .avatar-placeholder { width:135px; height:135px; border-radius:50%; background:linear-gradient(135deg,#5f52ff,#00d4ff); color:#fff; display:flex; align-items:center; justify-content:center; font-size:46px; font-weight:900; border:5px solid #fff; box-shadow:0 10px 35px rgba(0,0,0,.12); }
+    .choice-grid { margin:22px 0; }
+    .choice-card { border:2px solid #eee; border-radius:22px; padding:22px; cursor:pointer; transition:.25s; background:#fafafa; position:relative; }
+    .choice-card input { width:auto; position:absolute; top:18px; right:18px; transform:scale(1.35); accent-color:#5f52ff; }
+    .choice-card h4 { font-size:19px; margin-bottom:8px; }
+    .choice-card p { font-size:14px; color:#666; }
+    .status-pill { display:inline-block; padding:7px 13px; border-radius:999px; font-weight:800; font-size:13px; background:#eee; }
+    .status-Pending { background:#fff3cd; color:#856404; }
+    .status-Approved { background:#d1ecf1; color:#0c5460; }
+    .status-Rejected { background:#f8d7da; color:#721c24; }
+    .status-Completed { background:#d4edda; color:#155724; }
+    .request-card { margin-bottom:20px; }
+    .request-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; margin-bottom:18px; }
+    .admin-user { display:flex; gap:15px; align-items:center; }
+    .mini-avatar { width:56px; height:56px; border-radius:50%; object-fit:cover; background:#eee; }
+    .mini-avatar-placeholder { width:56px; height:56px; border-radius:50%; background:#5f52ff; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; }
+    .service-list { list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:15px 0; }
+    .service-list li { background:#f6f6f6; padding:12px; border-radius:14px; font-weight:700; }
+    .muted { color:#666; font-size:14px; }
+    .notice { margin-top:16px; font-weight:800; color:#5f52ff; }
+    .closed-box { background:#fff3cd; color:#856404; padding:16px; border-radius:16px; margin-top:18px; font-weight:700; }
+    .admin-toolbar { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:20px; }
+    footer { background:#111; color:#fff; text-align:center; padding:28px; }
+    footer a { color:#fff; font-weight:800; }
+    @media(max-width:900px){ nav{display:none;} .hero,.about,.profile-layout{grid-template-columns:1fr;} .services-grid,.dashboard-grid,.choice-grid,.service-list{grid-template-columns:1fr;} .hero-card{min-height:420px;} .stats{grid-template-columns:1fr;} .request-head,.admin-toolbar{flex-direction:column;} }
+  </style>
+</head>
+<body>
+  <div class="top-bar">Launch your digital business with Protech — modern websites, apps, cloud and security.</div>
+
+  <header>
+    <a href="#" class="logo" onclick="showPage('home')">Pro<span>tech</span></a>
+    <nav id="mainNav">
+      <a href="#services" onclick="showPage('home')">Services</a>
+      <a href="#about" onclick="showPage('home')">About</a>
+      <a href="#contact" onclick="showPage('home')">Contact</a>
+    </nav>
+    <div class="nav-actions" id="navActions">
+      <button class="btn btn-outline" onclick="showPage('login')">Login</button>
+      <button class="btn btn-dark" onclick="showPage('register')">Register</button>
+      <button class="btn btn-outline" onclick="showPage('adminLogin')">Admin</button>
+    </div>
+  </header>
+
+  <main id="homePage" class="page">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Build smarter with Protech.</h1>
+        <p>We create modern websites, secure cloud platforms, and digital tools that help businesses grow faster with confidence.</p>
+        <button class="btn btn-dark" onclick="showPage('register')">Start Now</button>
+        <a class="btn btn-outline" href="#services">Explore Services</a>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-content">
+          <h2>Technology that scales.</h2>
+          <p>From idea to deployment, Protech helps you design, launch and manage powerful digital products.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat-box"><h3>99%</h3><span>Secure uptime</span></div>
+          <div class="stat-box"><h3>24/7</h3><span>Support</span></div>
+          <div class="stat-box"><h3 id="completedProjectCount">0</h3><span>Projects Completed</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-subtitle">Everything your business needs to go online, automate workflows, and stay protected.</p>
+
+      <div class="services-grid">
+        <div class="service-card"><div class="icon">💻</div><h3>Web Development</h3><p>Responsive websites, landing pages, dashboards, and business portals with clean modern design.</p></div>
+        <div class="service-card"><div class="icon">☁️</div><h3>Cloud Solutions</h3><p>AWS hosting, deployments, databases, monitoring, and automation.</p></div>
+        <div class="service-card"><div class="icon">🔐</div><h3>Cyber Security</h3><p>Secure authentication, access control, SSL setup, backups, and protection best practices.</p></div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div>
+        <h2 class="section-title">Designed for future-ready businesses.</h2>
+        <p>Protech combines design, development and cloud engineering to help startups, students and companies build reliable digital products.</p>
+      </div>
+      <div class="about-box">
+        <ul>
+          <li>✅ Modern UI/UX Design</li>
+          <li>✅ AWS Deployment Support</li>
+          <li>✅ Login & Register Systems</li>
+          <li>✅ Scalable Backend Architecture</li>
+          <li>✅ Business Automation Tools</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Ready to build?</h2>
+      <p class="section-subtitle">Create your account and start your Protech journey today.</p>
+      <p class="section-subtitle">Contact: <strong>protechwithcloud@gmail.com</strong></p>
+      <button class="btn btn-dark" onclick="showPage('register')">Create Account</button>
+    </section>
+  </main>
+
+  <section id="loginPage" class="auth-section">
+    <div class="auth-card">
+      <h2>Welcome back</h2>
+      <p>Login to your Protech account.</p>
+      <form onsubmit="loginUser(event)">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="Enter your email" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="Enter your password" required /></div>
+        <button class="btn btn-dark full-btn" type="submit">Login</button>
+      </form>
+      <div class="switch-link">New here? <button onclick="showPage('register')">Create account</button></div>
+    </div>
+  </section>
+
+  <section id="registerPage" class="auth-section">
+    <div class="auth-card">
+      <h2>Create account</h2>
+      <p>Register and start building with Protech.</p>
+      <form onsubmit="registerUser(event)">
+        <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="Enter your name" required /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="Enter your email" required /></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="regPhone" placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" title="Phone number must be exactly 10 digits" required /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="6-24 chars: letters, numbers & symbol" minlength="6" maxlength="24" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,24}$" title="Password must be 6 to 24 characters and include letters, numbers, and a symbol" required /></div>
+        <button class="btn btn-dark full-btn" type="submit">Register</button>
+      </form>
+      <div class="switch-link">Already have an account? <button onclick="showPage('login')">Login</button></div>
+    </div>
+  </section>
+
+  <section id="adminLoginPage" class="auth-section">
+    <div class="auth-card">
+      <h2>Admin Login</h2>
+      <p>Login to view all user service requests.</p>
+      <form onsubmit="adminLogin(event)">
+        <div class="form-group"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="Enter admin email" required /></div>
+        <div class="form-group"><label>Admin Password</label><input type="password" id="adminPassword" placeholder="Enter admin password" required /></div>
+        <button class="btn btn-dark full-btn" type="submit">Admin Login</button>
+        <p id="adminLoginStatus" class="notice"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="dashboardPage" class="dashboard-page">
+    <div class="dashboard-hero">
+      <h2>Welcome to Protech 🚀</h2>
+      <p>Hello, <strong id="welcomeUser"></strong>. Your dashboard is ready.</p>
+      <button class="btn btn-outline" onclick="logoutUser()">Logout</button>
+    </div>
+
+    <div class="profile-layout">
+      <div class="panel-card">
+        <div class="avatar-wrap">
+          <div id="avatarBox"></div>
+          <h3 id="profileName">User</h3>
+          <p id="profileEmail" class="muted"></p>
+          <form onsubmit="uploadProfilePicture(event)" style="width:100%;">
+            <input type="file" id="profilePicInput" accept="image/*" />
+            <button class="btn btn-dark full-btn" type="submit">Add / Change Photo</button>
+          </form>
+          <button class="btn btn-outline full-btn" onclick="removeProfilePicture()">Remove Photo</button>
+          <p id="profileStatus" class="notice"></p>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <h3>Manage Your Account</h3>
+        <p><strong>Name:</strong> <span id="accountName"></span></p>
+        <p><strong>Email:</strong> <span id="accountEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="accountPhone"></span></p>
+        <p><strong>Joined:</strong> <span id="accountCreated"></span></p>
+        <hr style="margin:22px 0; border:0; border-top:1px solid #eee;">
+        <h3>View Details & Track Activities</h3>
+        <div id="myRequestsList"><p class="muted">No activity yet.</p></div>
+      </div>
+    </div>
+
+    <div id="serviceClosedBox" class="closed-box" style="display:none;"></div>
+
+    <div id="serviceRequestPanel" class="panel-card">
+      <h3>Choose Required Services</h3>
+      <p>Select services and give brief details to admin.</p>
+
+      <form onsubmit="submitServiceRequest(event)">
+        <div class="choice-grid">
+          <label class="choice-card">
+            <input type="checkbox" id="webDevelopment" />
+            <h4>💻 Web Development</h4>
+            <p>Websites, landing pages, portals and dashboards.</p>
+          </label>
+          <label class="choice-card">
+            <input type="checkbox" id="cloudSolutions" />
+            <h4>☁️ Cloud Solutions</h4>
+            <p>Cloud hosting, deployment and monitoring setup.</p>
+          </label>
+          <label class="choice-card">
+            <input type="checkbox" id="cyberSecurity" />
+            <h4>🔐 Cyber Security</h4>
+            <p>Authentication, access control and protection setup.</p>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Brief Details</label>
+          <textarea id="serviceDetails" placeholder="Explain your requirement..." required></textarea>
+        </div>
+
+        <button class="btn btn-dark" type="submit">Submit Request</button>
+      </form>
+
+      <p id="serviceRequestStatus" class="notice"></p>
+    </div>
+  </section>
+
+  <section id="adminDashboardPage" class="dashboard-page">
+    <div class="dashboard-hero">
+      <h2>Admin Dashboard 🛠️</h2>
+      <p>View user selections, details, timestamps and manage request status.</p>
+      <button class="btn btn-outline" onclick="logoutUser()">Logout</button>
+    </div>
+
+    <div class="admin-toolbar">
+      <div><h2>Service Requests</h2><p class="muted">Auto-refreshes every 5 seconds while admin dashboard is open.</p></div>
+      <button class="btn btn-dark" onclick="loadAdminRequests()">Refresh Now</button>
+    </div>
+
+    <div id="adminRequestsList"></div>
+  </section>
+
+  <footer id="contactFooter">
+    <p>© 2026 Protech. All rights reserved. | Contact: <a href="mailto:protechwithcloud@gmail.com">protechwithcloud@gmail.com</a></p>
+  </footer>
+
+  <script>
+    let currentUser = null;
+    let adminRefreshTimer = null;
+
+    function updateNavbar(role) {
+      const nav = document.getElementById('navActions');
+      const mainNav = document.getElementById('mainNav');
+
+      if (role === 'user' || role === 'admin') {
+        nav.innerHTML = '<button class="btn btn-dark" onclick="logoutUser()">Logout</button>';
+        mainNav.style.display = 'none';
+      } else {
+        nav.innerHTML =
+          '<button class="btn btn-outline" onclick="showPage(\'login\')">Login</button>' +
+          '<button class="btn btn-dark" onclick="showPage(\'register\')">Register</button>' +
+          '<button class="btn btn-outline" onclick="showPage(\'adminLogin\')">Admin</button>';
+        mainNav.style.display = '';
+      }
+    }
+
+    function hideAllPages() {
+      document.getElementById('homePage').classList.add('hidden');
+      document.getElementById('loginPage').classList.remove('active');
+      document.getElementById('registerPage').classList.remove('active');
+      document.getElementById('adminLoginPage').classList.remove('active');
+      document.getElementById('dashboardPage').classList.remove('active');
+      document.getElementById('adminDashboardPage').classList.remove('active');
+    }
+
+    function showPage(page) {
+      hideAllPages();
+
+      if (adminRefreshTimer && page !== 'adminDashboard') {
+        clearInterval(adminRefreshTimer);
+        adminRefreshTimer = null;
+      }
+
+      if (page === 'home') document.getElementById('homePage').classList.remove('hidden');
+      if (page === 'login') document.getElementById('loginPage').classList.add('active');
+      if (page === 'register') document.getElementById('registerPage').classList.add('active');
+      if (page === 'adminLogin') document.getElementById('adminLoginPage').classList.add('active');
+      if (page === 'dashboard') document.getElementById('dashboardPage').classList.add('active');
+      if (page === 'adminDashboard') document.getElementById('adminDashboardPage').classList.add('active');
+
+      window.scrollTo(0, 0);
+    }
+
+    async function safeJson(response) {
+      try {
+        return await response.json();
+      } catch (error) {
+        return { error: 'Invalid server response' };
+      }
+    }
+
+    async function checkSession() {
+      try {
+        const response = await fetch('/me', { credentials: 'include' });
+        const result = await safeJson(response);
+
+        if (result.logged_in && result.role === 'user') {
+          currentUser = result.user;
+          updateNavbar('user');
+          fillUserDashboard(result.user, result.active_request);
+          showPage('dashboard');
+          await loadMyRequests();
+        } else if (result.logged_in && result.role === 'admin') {
+          updateNavbar('admin');
+          showPage('adminDashboard');
+          await loadAdminRequests();
+          startAdminRealtime();
+        } else {
+          updateNavbar('guest');
+        }
+      } catch (error) {
+        updateNavbar('guest');
+      }
+    }
+
+    function fillUserDashboard(user, activeRequest) {
+      currentUser = user;
+      document.getElementById('welcomeUser').innerText = user.name;
+      document.getElementById('profileName').innerText = user.name;
+      document.getElementById('profileEmail').innerText = user.email;
+      document.getElementById('accountName').innerText = user.name;
+      document.getElementById('accountEmail').innerText = user.email;
+      document.getElementById('accountPhone').innerText = user.phone;
+      document.getElementById('accountCreated').innerText = user.created_at || '-';
+      renderAvatar(user);
+      handleServiceAvailability(activeRequest);
+    }
+
+    function renderAvatar(user) {
+      const box = document.getElementById('avatarBox');
+      if (user && user.profile_pic) {
+        box.innerHTML = '<img class="avatar" src="' + user.profile_pic + '?t=' + Date.now() + '" alt="Profile">';
+      } else {
+        const first = user && user.name ? user.name.charAt(0).toUpperCase() : 'U';
+        box.innerHTML = '<div class="avatar-placeholder">' + first + '</div>';
+      }
+    }
+
+    function handleServiceAvailability(activeRequest) {
+      const panel = document.getElementById('serviceRequestPanel');
+      const box = document.getElementById('serviceClosedBox');
+
+      if (activeRequest) {
+        panel.style.display = 'none';
+        box.style.display = 'block';
+        box.innerHTML = 'Services are temporarily closed for your account because request #' + activeRequest.id +
+          ' is <strong>' + activeRequest.status + '</strong>. It will reopen after admin marks it <strong>Completed</strong>.';
+      } else {
+        panel.style.display = 'block';
+        box.style.display = 'none';
+        box.innerHTML = '';
+      }
+    }
+
+    async function registerUser(event) {
+      event.preventDefault();
+
+      const user = {
+        name: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        phone: document.getElementById('regPhone').value.trim(),
+        password: document.getElementById('regPassword').value
+      };
+
+      const response = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(user)
+      });
+
+      const result = await safeJson(response);
+      alert(response.ok ? result.message : result.error);
+
+      if (response.ok) showPage('login');
+    }
+
+async function loginUser(event) {
+      event.preventDefault();
+
+      const loginData = {
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value
+      };
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(loginData)
+        });
+
+        const result = await safeJson(response);
+
+        if (response.ok) {
+          updateNavbar('user');
+          fillUserDashboard(result.user, null);
+          showPage('dashboard');
+        } else {
+          alert(result.error || 'Login failed');
+        }
+      } catch (error) {
+        alert('Login error: ' + error.message);
+      }
+    }
+
+async function adminLogin(event) {
+      event.preventDefault();
+
+      const adminStatus = document.getElementById('adminLoginStatus');
+      adminStatus.innerText = 'Checking admin access...';
+
+      const adminData = {
+        email: document.getElementById('adminEmail').value.trim(),
+        password: document.getElementById('adminPassword').value
+      };
+
+      const response = await fetch('/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(adminData)
+      });
+
+      const result = await safeJson(response);
+
+      if (response.ok) {
+        adminStatus.innerText = '';
+        document.getElementById('adminEmail').value = '';
+        document.getElementById('adminPassword').value = '';
+        updateNavbar('admin');
+        showPage('adminDashboard');
+        await loadAdminRequests();
+        await loadCompletedProjectCount();
+        startAdminRealtime();
+      } else {
+        adminStatus.innerText = result.error || 'Admin login failed';
+      }
+    }
+
+    async function logoutUser() {
+      await fetch('/logout', { method: 'POST', credentials: 'include' });
+      currentUser = null;
+      updateNavbar('guest');
+      showPage('home');
+    }
+
+    async function uploadProfilePicture(event) {
+      event.preventDefault();
+
+      const input = document.getElementById('profilePicInput');
+      const status = document.getElementById('profileStatus');
+
+      if (!input.files[0]) {
+        status.innerText = 'Please select an image.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('profile_pic', input.files[0]);
+
+      const response = await fetch('/profile-picture', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      });
+
+      const result = await safeJson(response);
+      status.innerText = response.ok ? result.message : result.error;
+
+      if (response.ok) {
+        currentUser.profile_pic = result.profile_pic;
+        renderAvatar(currentUser);
+        input.value = '';
+      }
+    }
+
+    async function removeProfilePicture() {
+      const response = await fetch('/profile-picture', {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+
+      const result = await safeJson(response);
+      document.getElementById('profileStatus').innerText = response.ok ? result.message : result.error;
+
+      if (response.ok && currentUser) {
+        currentUser.profile_pic = null;
+        renderAvatar(currentUser);
+      }
+    }
+
+    async function submitServiceRequest(event) {
+      event.preventDefault();
+
+      const requestData = {
+        web_development: document.getElementById('webDevelopment').checked,
+        cloud_solutions: document.getElementById('cloudSolutions').checked,
+        cyber_security: document.getElementById('cyberSecurity').checked,
+        details: document.getElementById('serviceDetails').value.trim()
+      };
+
+      const response = await fetch('/service-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(requestData)
+      });
+
+      const result = await safeJson(response);
+      document.getElementById('serviceRequestStatus').innerText =
+        response.ok ? result.message + ' at ' + result.created_at : result.error;
+
+      if (response.ok) {
+        document.getElementById('serviceDetails').value = '';
+        document.getElementById('webDevelopment').checked = false;
+        document.getElementById('cloudSolutions').checked = false;
+        document.getElementById('cyberSecurity').checked = false;
+        await loadMyRequests();
+        await checkSession();
+      }
+    }
+
+    async function loadMyRequests() {
+      const response = await fetch('/my-requests', { credentials: 'include' });
+      const result = await safeJson(response);
+      const box = document.getElementById('myRequestsList');
+
+      if (!response.ok) {
+        box.innerHTML = '<p>' + result.error + '</p>';
+        return;
+      }
+
+      if (!result.length) {
+        box.innerHTML = '<p class="muted">No activity yet.</p>';
+        return;
+      }
+
+      box.innerHTML = result.map(function(req) {
+        return '<div style="border:1px solid #eee; border-radius:16px; padding:15px; margin-bottom:12px;">' +
+          '<p><strong>Request #' + req.id + '</strong> <span class="status-pill status-' + req.status + '">' + req.status + '</span></p>' +
+          '<p class="muted">Submitted: ' + (req.created_at || '-') + ' | Updated: ' + (req.updated_at || '-') + '</p>' +
+          '<p>' + (req.web_development ? '✅ Web Development ' : '') + (req.cloud_solutions ? '✅ Cloud Solutions ' : '') + (req.cyber_security ? '✅ Cyber Security' : '') + '</p>' +
+          '<p>' + escapeHtml(req.details || '') + '</p>' +
+          '</div>';
+      }).join('');
+    }
+
+    function startAdminRealtime() {
+      if (adminRefreshTimer) clearInterval(adminRefreshTimer);
+      adminRefreshTimer = setInterval(loadAdminRequests, 5000);
+    }
+
+    async function loadAdminRequests() {
+      const response = await fetch('/admin/requests', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      const result = await safeJson(response);
+      const container = document.getElementById('adminRequestsList');
+
+      if (!response.ok) {
+        container.innerHTML = '<div class="request-card"><p>' + (result.error || 'Failed to load requests') + '</p></div>';
+        return;
+      }
+
+      if (result.length === 0) {
+        container.innerHTML = '<div class="request-card"><h3>No requests yet</h3></div>';
+        return;
+      }
+
+      container.innerHTML = result.map(function(req) {
+        const avatar = req.profile_pic
+          ? '<img class="mini-avatar" src="' + req.profile_pic + '?t=' + Date.now() + '" alt="Profile">'
+          : '<div class="mini-avatar-placeholder">' + req.name.charAt(0).toUpperCase() + '</div>';
+
+        return '<div class="request-card" data-request-id="' + req.id + '">' +
+          '<div class="request-head">' +
+            '<div class="admin-user">' +
+              avatar +
+              '<div><h3>' + escapeHtml(req.name) + '</h3><p class="muted">' + escapeHtml(req.email) + ' | ' + escapeHtml(req.phone) + '</p></div>' +
+            '</div>' +
+            '<span class="status-pill status-' + req.status + '">' + req.status + '</span>' +
+          '</div>' +
+          '<ul class="service-list">' +
+            '<li>' + (req.web_development ? '✅' : '❌') + ' Web Development</li>' +
+            '<li>' + (req.cloud_solutions ? '✅' : '❌') + ' Cloud Solutions</li>' +
+            '<li>' + (req.cyber_security ? '✅' : '❌') + ' Cyber Security</li>' +
+          '</ul>' +
+          '<p><strong>Brief Details:</strong> ' + escapeHtml(req.details || '') + '</p>' +
+          '<p class="muted"><strong>Submitted:</strong> ' + (req.created_at || '-') + ' | <strong>Last Updated:</strong> ' + (req.updated_at || '-') + '</p>' +
+          '<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">' +
+            statusButton(req, 'Pending') +
+            statusButton(req, 'Approved') +
+            statusButton(req, 'Rejected') +
+            statusButton(req, 'Completed') +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function statusButton(req, status) {
+      const activeClass = req.status === status ? 'btn-dark' : 'btn-outline';
+      return '<button class="btn ' + activeClass + '" onclick="updateRequestStatus(' + req.id + ', \'' + status + '\')">' + status + '</button>';
+    }
+
+    async function updateRequestStatus(id, status) {
+      const response = await fetch('/admin/requests/' + id + '/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: status })
+      });
+
+      const result = await safeJson(response);
+
+      if (!response.ok) {
+        alert(result.error || 'Failed to update status');
+        return;
+      }
+
+      await loadAdminRequests();
+      await loadCompletedProjectCount();
+    }
+
+    async function loadCompletedProjectCount() {
+      try {
+        const response = await fetch('/stats', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const data = await safeJson(response);
+        const countBox = document.getElementById('completedProjectCount');
+
+        if (countBox) countBox.innerText = data.completed_projects || 0;
+      } catch (error) {
+        console.log('Unable to load completed projects count');
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      checkSession();
+      loadCompletedProjectCount();
+      setInterval(loadCompletedProjectCount, 5000);
+    });
+  </script>
+</body>
+</html>
